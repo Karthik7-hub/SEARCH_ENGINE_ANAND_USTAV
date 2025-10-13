@@ -1,11 +1,11 @@
-# FILE: README.md (Modified)
 ---
 title: Smart Search API
 emoji: 🔍
 colorFrom: blue
 colorTo: green
 sdk: docker
-app_port: 8000
+app_port: 7860
+pinned: false
 ---
 
 # Smart Search API
