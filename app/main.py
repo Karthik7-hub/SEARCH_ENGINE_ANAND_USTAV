@@ -147,7 +147,7 @@ async def trigger_refresh():
 
 
 @app.get("/search", response_model=SearchResponse)
-async def search(q: str, k: int = 5):
+async def search(q: str, k: int = 25):
     if hybrid_engine is None:
         raise HTTPException(
             status_code=503,
