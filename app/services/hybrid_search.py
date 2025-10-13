@@ -8,6 +8,7 @@ from app.utils.database import get_database, ObjectId
 from app.services.data_loader import deep_serialize_mongo_types
 from typing import List, Dict, Any
 import logging
+import numpy
 
 logger = logging.getLogger(__name__)
 
@@ -102,7 +103,7 @@ class HybridSearchEngine:
         results.sort(key=lambda x: x["score"], reverse=True)
         return results
 
-    async def search(self, query: str, k: int = 5) -> List[Dict[str, Any]]:
+    async def search(self, query: str, k: int = 25) -> List[Dict[str, Any]]:
         if not self.indexed_items:
             return []
 
@@ -126,4 +127,4 @@ class HybridSearchEngine:
                 if item_id in populated_services:
                     result['item'] = populated_services[item_id]
 
-        return scored_results[:k]
+        return scored_results[:min(k, scored_results.len)]
