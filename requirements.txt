@@ -1,0 +1,11 @@
+# FILE: app/requirements.txt
+fastapi
+uvicorn[standard]
+pydantic-settings
+sentence-transformers
+faiss-cpu
+numpy
+motor
+python-dotenv
+setuptools
+pymongo[srv]
