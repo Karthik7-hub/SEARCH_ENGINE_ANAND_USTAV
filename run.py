@@ -1,10 +1,10 @@
 # FILE: run.py
 import uvicorn
+import os
 
 if __name__ == "__main__":
-    """
-    This is the main entry point to run the FastAPI application.
-    It starts a Uvicorn server, which will host the app.
-    The --reload flag automatically restarts the server when code changes.
-    """
-    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
+    # Hugging Face provides the port in the 'PORT' env var. Default to 7860.
+    port = int(os.environ.get("PORT", 7860))
+
+    # Host must be "0.0.0.0" to be accessible within the Docker container
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port)
