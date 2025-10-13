@@ -1,0 +1,3 @@
+# FILE: app/dev-requirements.txt
+pytest
+pytest-mock
