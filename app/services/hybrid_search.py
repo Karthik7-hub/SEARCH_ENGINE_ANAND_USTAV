@@ -127,4 +127,4 @@ class HybridSearchEngine:
                 if item_id in populated_services:
                     result['item'] = populated_services[item_id]
 
-        return scored_results[:min(k, scored_results.len)]
+        return scored_results[:min(k, len(scored_results))]
