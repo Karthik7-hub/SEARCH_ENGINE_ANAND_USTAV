@@ -21,18 +21,9 @@ def normalize_embeddings(vectors: np.ndarray) -> np.ndarray:
     return np.divide(vectors, norms, out=np.zeros_like(vectors), where=norms != 0)
 
 
-def expand_query(query: str) -> str:
-    expanded_terms = set(query.lower().split())
-    for term in query.lower().split():
-        if term in settings.SYNONYM_MAP:
-            expanded_terms.add(settings.SYNONYM_MAP[term])
-    return " ".join(list(expanded_terms))
-
-
 def encode_query(text: str) -> np.ndarray:
     model = get_model()
-    expanded_text = expand_query(text)
-    embedding = model.encode([expanded_text], convert_to_numpy=True)
+    embedding = model.encode([text], convert_to_numpy=True)
     return normalize_embeddings(embedding).astype("float32")
 
 

@@ -118,7 +118,7 @@ async def lifespan(app: FastAPI):
     await close_mongo_connection()
     logger.info("Application shutdown.")
 
-app = FastAPI(title="Smart Search API", version="3.0.0", lifespan=lifespan)
+app = FastAPI(title="Smart Search API", version="2.0.0", lifespan=lifespan)
 
 # --- API Endpoints ---
 # --- ✅ 2. ADD THE CORS MIDDLEWARE CONFIGURATION ---
@@ -177,21 +177,17 @@ def autocomplete(prefix: str):
 
 
 @app.get("/search", response_model=SearchResponse, tags=["Search"])
-async def search(
-    q: str,
-    min_rating: Optional[float] = Query(None, ge=0, le=5),
-    max_price: Optional[int] = Query(None, ge=0)
-):
+async def search(q: str):
+    """Performs a simplified semantic search."""
     if hybrid_engine is None:
         raise HTTPException(
             status_code=503, detail="Search engine is not ready.")
 
-    cache_key = f"{q}:{min_rating}:{max_price}"
-    if cache_key in search_cache:
-        return search_cache[cache_key]
+    if q in search_cache:
+        return search_cache[q]
 
-    results_dict = await hybrid_engine.search(q, min_rating=min_rating, max_price=max_price)
+    results_dict = await hybrid_engine.search(q)
     response = SearchResponse(query=q, **results_dict)
 
-    search_cache[cache_key] = response
+    search_cache[q] = response
     return response
