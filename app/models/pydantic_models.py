@@ -9,10 +9,27 @@ class SearchResultItem(BaseModel):
     semantic_score: Optional[float] = None
 
 
+class FacetItem(BaseModel):
+    name: str
+    count: int
+
+
+class Facets(BaseModel):
+    categories: List[FacetItem]
+    price_ranges: List[FacetItem]
+
+
 class SearchResponse(BaseModel):
     query: str
-    results: List[SearchResultItem]
+    categories: List[SearchResultItem]
+    services: List[SearchResultItem]
+    suggestion: Optional[str] = None
+    facets: Optional[Facets] = None
     message: Optional[str] = None
+
+
+class AutocompleteResponse(BaseModel):
+    suggestions: List[str]
 
 
 class RefreshResponse(BaseModel):
