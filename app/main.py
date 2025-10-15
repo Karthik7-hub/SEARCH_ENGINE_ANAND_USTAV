@@ -17,6 +17,7 @@ from app.services.hybrid_search import HybridSearchEngine
 from app.utils.persistence import load_items, save_items
 from app.utils.database import connect_to_mongo, close_mongo_connection, get_database
 from app.utils.locks import data_lock
+from fastapi.middleware.cors import CORSMiddleware
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -120,6 +121,24 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Smart Search API", version="3.0.0", lifespan=lifespan)
 
 # --- API Endpoints ---
+# --- ✅ 2. ADD THE CORS MIDDLEWARE CONFIGURATION ---
+# This is the "approved guest list" for your API.
+origins = [
+    "https://anand-utsav.vercel.app",  # Your production front-end
+    # Your local development front-end (Vite default)
+    "http://localhost:5173",
+    # Your local development front-end (Create React App default)
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
+# --- END OF NEW SECTION ---
 
 
 @app.get("/", response_model=StatusResponse, tags=["Health"])
